@@ -71,7 +71,7 @@ export default function RestaurantCard({
   // Animate scale + rotate when card becomes front
   useEffect(() => {
     controls.start({
-      scale: isFront ? 1 : 0.97,
+      scale: isFront ? 1 : 0.94,
       rotate: isFront ? "0deg" : `${index % 2 ? 4 : -4}deg`,
       transition: {
         type: "spring",
