@@ -18,7 +18,7 @@ export const fetchRecommendationsAtom = atom(
 export const clearRecommendationsAtom = atom(
   null,
   async (_get, set) => {
-    const { message, recommendations } = await clearScore();
+    const { recommendations } = await clearScore();
     // alert(message);
     set(recommendationsAtom, recommendations);
   }
