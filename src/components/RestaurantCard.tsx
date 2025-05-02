@@ -1,3 +1,4 @@
+// V4 no rotation on stacked cards, just scale to the front but issue is swiping does not feel smooth
 import { Restaurant } from "@/types";
 import { formatTag, TagDisplay } from "@/utils/tagFormat";
 import {
@@ -61,7 +62,14 @@ export default function RestaurantCard({
     };
   }, [opacityX, opacityY]);
 
+  const rotateRaw = useTransform(x, [-150, 150], [-18, 18]);
   const isFront = index === stackSize - 1;
+  const rotate = useTransform(() => {
+        if (isFront) {
+          return `${rotateRaw.get()}deg`;
+        }
+        return `0deg`;
+      });
 
   // Animate scale with offset for stacking
   useEffect(() => {
@@ -103,7 +111,7 @@ export default function RestaurantCard({
 
   const handleDragEnd = (_: any, info: PanInfo) => {
     let dir: SwipeDirection | null = null;
-    if (Math.abs(info.offset.x) > 80) {
+    if (Math.abs(info.offset.x) > 200) {
       dir = info.offset.x > 0 ? "right" : "left";
     } else if (info.offset.y < -80) {
       dir = "up";
@@ -129,6 +137,7 @@ export default function RestaurantCard({
         x,
         y,
         opacity: isFront ? opacity : 1,
+        rotate,
         zIndex: index,
       }}
       drag={isFront}
@@ -204,4 +213,3 @@ export default function RestaurantCard({
     </motion.div>
   );
 }
-
