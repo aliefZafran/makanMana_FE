@@ -111,9 +111,9 @@ export default function RestaurantCard({
 
   const handleDragEnd = (_: any, info: PanInfo) => {
     let dir: SwipeDirection | null = null;
-    if (Math.abs(info.offset.x) > 200) {
+    if (Math.abs(info.offset.x) > 140) {
       dir = info.offset.x > 0 ? "right" : "left";
-    } else if (info.offset.y < -80) {
+    } else if (info.offset.y < -120) {
       dir = "up";
     }
 
