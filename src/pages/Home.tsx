@@ -21,6 +21,7 @@ import { userLocationAtom } from "@/atoms/userLocationAtom";
 import RadiusSelector from "@/components/RadiusSelector";
 import { Button } from "@/components/ui/button";
 import FinalSection from "@/components/FinalSection";
+import SwipeHintOverlay from "@/components/SwipeHintOverlay";
 
 const Home = () => {
   const [restaurants] = useAtom(restaurantListAtom);
@@ -95,6 +96,7 @@ const Home = () => {
   console.log(recommendations);
   return (
     <div className="max-w-xl mx-auto p-6 flex flex-col justify-around items-center gap-8 relative top-0 h-screen lg:h-fit">
+      <SwipeHintOverlay />
       <h1 className="!text-4xl md:!text-5xl text-center text-[var(--color-cream)] font-bold">
         MakanMana 🍽️
       </h1>
