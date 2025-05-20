@@ -42,14 +42,10 @@ const Home = () => {
 
   // initial load
   useEffect(() => {
-    // navigator.geolocation.getCurrentPosition((pos) => {
-    //   setLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude });
-    //   fetchRestaurants({ lat: pos.coords.latitude, lon: pos.coords.longitude });
-    // });
-
-    const testLocation = { lat: 3.139, lon: 101.6869 }; // KL coordinates
-    setLocation(testLocation);
-    fetchRestaurants(testLocation);
+    navigator.geolocation.getCurrentPosition((pos) => {
+      setLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+      fetchRestaurants({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+    });
   }, [setLocation, fetchRestaurants]);
 
   useEffect(() => {
