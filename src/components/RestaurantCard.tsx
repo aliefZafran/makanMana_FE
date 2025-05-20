@@ -14,6 +14,7 @@ import TagList from "./TagList";
 import { useAtom } from "jotai";
 import { FaStar } from "react-icons/fa";
 
+
 export type SwipeDirection = "left" | "right" | "up";
 
 type Props = {

@@ -43,10 +43,13 @@ const Home = () => {
 
   // initial load
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      setLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude });
-      fetchRestaurants({ lat: pos.coords.latitude, lon: pos.coords.longitude });
-    });
+    // navigator.geolocation.getCurrentPosition((pos) => {
+    //   setLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+    //   fetchRestaurants({ lat: pos.coords.latitude, lon: pos.coords.longitude });
+    // });
+    const testLocation = { lat: 3.139, lon: 101.6869 }; // KL coordinates
+    setLocation(testLocation);
+    fetchRestaurants(testLocation);
   }, [setLocation, fetchRestaurants]);
 
   useEffect(() => {
@@ -96,7 +99,7 @@ const Home = () => {
   console.log(recommendations);
   return (
     <div className="max-w-xl mx-auto p-6 flex flex-col justify-around items-center gap-8 relative top-0 h-screen lg:h-fit">
-      <SwipeHintOverlay />
+      
       <h1 className="!text-4xl md:!text-5xl text-center text-[var(--color-cream)] font-bold">
         MakanMana 🍽️
       </h1>
@@ -115,6 +118,7 @@ const Home = () => {
           </div>
         ) : visible.length > 0 ? (
           <>
+            <SwipeHintOverlay />
             <div className="relative w-full h-[360px] md:h-[400px]">
               {visible.map((r, idx) => (
                 <RestaurantCard
