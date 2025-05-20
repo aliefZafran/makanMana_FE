@@ -46,15 +46,20 @@ export default function SpotlightView() {
         </div>
       )}
 
-      <div className="relative flex flex-col items-center justify-between text-gray-700 text-center p-6 rounded-xl w-[280px] md:w-[350px] h-72 md:h-80  shadow-lg bg-gradient-to-br from-yellow-100 via-red-100 to-pink-100 border border-yellow-300 animate-fade-in overflow-hidden">
-        <div>
-        <h2 className="text-xl md:text-2xl font-bold mb-3 text-center">🎉 You picked:</h2>
-        <p className="text-2xl md:text-3xl font-semibold mb-6">{restaurant.name}</p>
+      <div
+      style={{
+        backgroundImage: `url(${restaurant.photo})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+       className="relative flex flex-col items-center justify-between text-gray-700 text-center p-6 rounded-xl  w-60 md:w-76 h-90 md:h-100 shadow-lg bg-gradient-to-br from-yellow-100 via-red-100 to-pink-100 border border-[var(--color-card-border)] animate-fade-in overflow-hidden">
+        <div className="text-[var(--color-cream)] bg-gray-800/60 p-2 rounded-lg">
+        <h2 className="text-xl md:text-2xl font-bold mb-3 text-center">🎉 You've picked:</h2>
+        <p className="text-2xl md:text-3xl font-semibold">{restaurant.name}</p>
         </div>
         <div className="flex flex-col gap-y-3 text-xs md:text-base">
           <a
-            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(restaurant.name)}+@${restaurant.lat},${restaurant.lon}`
-}
+            href={restaurant.linkToLocation}
             target="_blank"
             
           >
@@ -64,7 +69,7 @@ export default function SpotlightView() {
           </a>
           <button
             onClick={() => setSpotlightRestaurant(null)}
-            className="bg-red-500 text-sm text-white hover:bg-red-700 rounded-lg"
+            className="bg-red-500 text-sm text-white hover:bg-red-700 rounded-lg shadow-2xl"
           >
             Never mind — go back
           </button>

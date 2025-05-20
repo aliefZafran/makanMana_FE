@@ -8,7 +8,13 @@ import {
   useMotionValue,
   useTransform,
 } from "framer-motion";
+import { radiusAtom } from "@/atoms/restaurantAtoms";
 import { useEffect, useState } from "react";
+import TagList from "./TagList";
+import { useAtom } from "jotai";
+import StarRating from "@/utils/StarRating";
+import { FaStar } from "react-icons/fa";
+import { Star } from "lucide-react";
 
 export type SwipeDirection = "left" | "right" | "up";
 
@@ -36,8 +42,7 @@ export default function RestaurantCard({
             colorClass: "bg-yellow-100 text-yellow-800",
           }));
       } else {
-        const tag = formatTag(k, v);
-        return tag ? [tag] : [];
+        return formatTag(k, v); // `formatTag` now always returns an array
       }
     }
   );
@@ -65,11 +70,11 @@ export default function RestaurantCard({
   const rotateRaw = useTransform(x, [-150, 150], [-18, 18]);
   const isFront = index === stackSize - 1;
   const rotate = useTransform(() => {
-        if (isFront) {
-          return `${rotateRaw.get()}deg`;
-        }
-        return `0deg`;
-      });
+    if (isFront) {
+      return `${rotateRaw.get()}deg`;
+    }
+    return `0deg`;
+  });
 
   // Animate scale with offset for stacking
   useEffect(() => {
@@ -130,6 +135,19 @@ export default function RestaurantCard({
 
   const handleButtonSwipe = (dir: SwipeDirection) => animateFlight(dir);
 
+  const [glow, setGlow] = useState(false);
+  useEffect(() => {
+    if (!isFront) return;
+
+    const timeout = setTimeout(() => {
+      setGlow(true);
+    }, 8000);
+
+    return () => clearTimeout(timeout); // reset when component re-renders
+  }, [restaurant.id, isFront]);
+
+  const [radius] = useAtom(radiusAtom);
+
   return (
     <motion.div
       key={restaurant.id}
@@ -139,6 +157,9 @@ export default function RestaurantCard({
         opacity: isFront ? opacity : 1,
         rotate,
         zIndex: index,
+        backgroundImage: `url(${restaurant.photo})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
       drag={isFront}
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
@@ -147,8 +168,8 @@ export default function RestaurantCard({
       initial={{
         scale: isFront ? 1 : 0.94,
       }}
-      className="absolute top-0 left-0 right-0 mx-auto w-72 md:w-80 h-72 bg-[var(--color-cream)] border-2 border-[var(--color-card-border)]
-                 rounded-2xl p-6 select-none touch-none cursor-grab active:cursor-grabbing flex flex-col justify-between"
+      className="absolute top-0 left-0 right-0 mx-auto w-60 md:w-76 h-90 md:h-100 bg-[var(--color-cream)] border border-[var(--color-card-border)]
+                 rounded-2xl p-3 select-none touch-none cursor-grab active:cursor-grabbing flex flex-col justify-end gap-y-2 md:gap-y-4"
     >
       {flashDirection && (
         <motion.div
@@ -169,45 +190,53 @@ export default function RestaurantCard({
         </motion.div>
       )}
 
-      <div className="flex flex-col gap-y-4">
-        <div className="text-center">
-          <h2 className="text-xl md:text-2xl font-bold text-gray-700">
+      <div className="flex flex-col gap-y-2">
+        <div className="text-left">
+          {restaurant.rating ? (
+            <div className="flex items-center gap-x-1.5 p-1 bg-white/80 rounded-lg max-w-fit">
+              <p className="text-black font-medium text-xs">
+                {restaurant.rating}
+              </p>
+              <FaStar className="text-yellow-400" />
+            </div>
+          ) : null}
+
+          <h2 className="text-base md:text-xl font-bold text-white text-shadow-lg">
             {restaurant.name}
           </h2>
-          <p className="text-gray-500 text-sm">
-            {restaurant.distance_km.toFixed(1)} km away
+          <p className="text-white text-xs md:text-sm font-semibold text-shadow-lg">
+            {restaurant.distance_km
+              ? `${restaurant.distance_km.toFixed(1)} km away`
+              : `< ${radius / 1000} km away`}
           </p>
         </div>
-        <div className="flex flex-wrap max-h-24 overflow-y-auto justify-center gap-2">
-          {tags.map((t, i) => (
-            <span
-              key={i}
-              className={`px-3 py-1 rounded-full ${t.colorClass} text-xs md:text-sm`}
-            >
-              {t.label}
-            </span>
-          ))}
-        </div>
+        {tags.length === 0 ? null : <TagList tags={tags} />}
       </div>
 
-      <div className="flex justify-center gap-x-2">
+      <div className="flex items-center justify-center md:justify-between">
         <button
           onClick={() => handleButtonSwipe("left")}
-          className="hidden md:block bg-red-500 hover:bg-red-600 px-4 py-2 rounded-xl text-white"
+          className="hidden md:block bg-red-400/60 hover:bg-red-500/80 rounded-full !px-4 text-white"
         >
-          👎
+          🙅🏻‍♀️
         </button>
-        <button
-          onClick={() => handleButtonSwipe("up")}
-          className="bg-blue-500 hover:bg-blue-600 rounded-xl text-white"
-        >
-          <span className="text-xs md:text-base">I want this!</span>
-        </button>
+        <div className={`relative ${glow ? "animate-glow-border" : ""}`}>
+          <button
+            onClick={() => {
+              setGlow(false);
+              handleButtonSwipe("up");
+            }}
+            className="relative z-10 bg-blue-500 hover:bg-blue-600 text-white !text-sm !font-semibold rounded-md !px-6 md:!px-5 !py-1 md:!py-2"
+          >
+            I want this!
+          </button>
+        </div>
+
         <button
           onClick={() => handleButtonSwipe("right")}
-          className="hidden md:block bg-green-500 hover:bg-green-600 px-4 py-2 rounded-xl text-white"
+          className="hidden md:block bg-green-400/60 hover:bg-green-500/80 !px-4 rounded-full text-white"
         >
-          👍
+          🙆🏼‍♂️
         </button>
       </div>
     </motion.div>

@@ -2,7 +2,7 @@ import { atom } from 'jotai';
 import {
     restaurantListAtom,
     currentIndexAtom,
-    fetchRestaurantsAtom,
+    fetchRestaurantsAtomNew,
     restaurantLoadingAtom,
     restaurantErrorAtom,
     spotlightRestaurantAtom,
@@ -22,7 +22,8 @@ export const resetAppAtom = atom(null, async (get, set) => {
     const userCoords = get(userLocationAtom);
     if (userCoords) {
       const { lat, lon } = userCoords;
-      await set(fetchRestaurantsAtom, { lat, lon });
+      // await set(fetchRestaurantsAtom, { lat, lon });
+      await set(fetchRestaurantsAtomNew,  { lat, lon });
     }else {
       set(restaurantLoadingAtom, false);
       set(restaurantErrorAtom, "No user location available.");

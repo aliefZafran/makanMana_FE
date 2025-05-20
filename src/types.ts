@@ -5,6 +5,9 @@ export interface Restaurant {
     lon: number;
     tags: Record<string, string>;
     distance_km: number;
+    photo?: string;
+    rating: number;
+    linkToLocation?: string;
   }
 
   export interface RestaurantResponse {

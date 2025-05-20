@@ -2,22 +2,24 @@ import { useAtom } from 'jotai';
 import {
   radiusAtom,
   fetchRestaurantsAtom,
+  fetchRestaurantsAtomNew,
 } from '@/atoms/restaurantAtoms';
-import { clearRecommendationsAtom, fetchRecommendationsAtom } from '@/atoms/recommendationAtoms';
+import { fetchRecommendationsAtom, fetchRecommendationsAtomNew } from '@/atoms/recommendationAtoms';
 import { userLocationAtom } from '@/atoms/userLocationAtom';
+import { resetAppAtom } from '@/atoms/resetAppAtom';
 
-const radiusOptions = [1000, 3000, 5000];
+const radiusOptions = [1000, 3000, 7000];
 
 export default function RadiusSelector() {
   const [radius, setRadius] = useAtom(radiusAtom);
-  const [, fetchRestaurants] = useAtom(fetchRestaurantsAtom);
+  const [, fetchRestaurants] = useAtom(fetchRestaurantsAtomNew);
   const [userLocation] = useAtom(userLocationAtom);
-  const [, clearRecommendations]  = useAtom(clearRecommendationsAtom)
-  const [, fetchRecommendations]  = useAtom(fetchRecommendationsAtom)
+  const [, fetchRecommendations]  = useAtom(fetchRecommendationsAtomNew)
+  const [, resetApp] = useAtom(resetAppAtom);
 
   const handleChange = async (newRadius: number) => {
     setRadius(newRadius);
-    clearRecommendations();
+    resetApp();
 
     if (userLocation) {
       await fetchRestaurants({
@@ -30,15 +32,15 @@ export default function RadiusSelector() {
 
   return (
     <div>
-      <p className="text-sm font-medium mb-2">Search Radius:</p>
+      <p className="text-sm font-semibold mb-2">Search Radius:</p>
       <div className="flex flex-wrap gap-2">
         {radiusOptions.map((r) => (
           <button
             key={r}
             onClick={() => handleChange(r)}
-            className={`px-3 py-1 rounded-full text-sm border transition-all duration-200 ${
+            className={`!px-3 !py-2 md:!px-4 md:!py-3 rounded-full text-sm border transition-all duration-200 ${
               radius === r
-                ? 'bg-green-600 text-white border-green-700'
+                ? 'bg-green-600 text-white ring ring-orange-300'
                 : 'bg-[var(--color-cream)] text-gray-800 hover:bg-gray-100'
             }`}
           >
