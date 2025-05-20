@@ -1,10 +1,9 @@
 import { useAtom } from 'jotai';
 import {
   radiusAtom,
-  fetchRestaurantsAtom,
   fetchRestaurantsAtomNew,
 } from '@/atoms/restaurantAtoms';
-import { fetchRecommendationsAtom, fetchRecommendationsAtomNew } from '@/atoms/recommendationAtoms';
+import { fetchRecommendationsAtomNew } from '@/atoms/recommendationAtoms';
 import { userLocationAtom } from '@/atoms/userLocationAtom';
 import { resetAppAtom } from '@/atoms/resetAppAtom';
 

@@ -12,9 +12,7 @@ import { radiusAtom } from "@/atoms/restaurantAtoms";
 import { useEffect, useState } from "react";
 import TagList from "./TagList";
 import { useAtom } from "jotai";
-import StarRating from "@/utils/StarRating";
 import { FaStar } from "react-icons/fa";
-import { Star } from "lucide-react";
 
 export type SwipeDirection = "left" | "right" | "up";
 
